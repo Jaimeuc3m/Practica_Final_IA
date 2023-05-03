@@ -1,0 +1,80 @@
+import numpy as np
+
+# Parámetros del problema
+T = 48 # Duración total en intervalos de media hora (24 horas)
+X = np.arange(16, 26, 0.5) # Temperaturas posibles
+A = np.array([0, 1]) # Acciones posibles
+N = X.shape[0] # Número de estados posibles
+M = A.shape[0] # Número de acciones posibles
+goal_temp = 22.0 # Temperatura objetivo del usuario
+
+# Funciones de recompensa y probabilidad de transición
+def reward(action, temp):
+    if action == 1:
+        return -abs(goal_temp - temp)
+    else:
+        return 0
+    
+def prob_transition(action, temp, temp_new):
+    if action == 1:
+        if temp == 16:
+            same_prob = 0.3
+            up_prob = 0.35
+            up_more_prob = 0.35
+            down_prob = 0.0
+        elif temp == 24.5:
+            same_prob = 0.2
+            up_prob = 0.7
+            up_more_prob = 0.1
+            down_prob = 0.0
+        elif temp == 25:
+            same_prob = 0.3
+            up_prob = 0.0
+            up_more_prob = 0.0
+            down_prob = 0.7
+        else:
+            same_prob = 0.2
+            up_prob = 0.2
+            up_more_prob = 0.2
+            down_prob = 0.1
+    else:
+        if temp == 16:
+            same_prob = 0.9
+            up_prob = 0.0
+            up_more_prob = 0.0
+            down_prob = 0.1
+        elif temp == 25:
+            same_prob = 0.3
+            up_prob = 0.0
+            up_more_prob = 0.0
+            down_prob = 0.7
+        else:
+            same_prob = 0.4
+            up_prob = 0.1
+            up_more_prob = 0.1
+            down_prob = 0.7
+            
+    if temp_new == temp:
+        return same_prob
+    elif temp_new == temp + 0.5:
+        return up_prob
+    elif temp_new == temp + 1.0:
+        return up_more_prob
+    elif temp_new == temp - 0.5:
+        return down_prob
+    else:
+        return 0.0
+
+# Algoritmo de value iteration
+V = np.zeros((T+1, N)) # Función de valor
+policy = np.zeros((T, N)) # Política óptima
+for t in range(T-1, -1, -1): # Recorrer el tiempo al revés
+    for i in range(N):
+        if t == T-1:
+            # Condición de frontera para t=T
+            V[t, i] = 0
+        else:
+            # Actualización de la función de valor
+            V[t, i] = np.max([reward(a, X[i]) + 
+                              np.sum([prob_transition(a, X[i], X[j]) * V[t+1, j] for j in range(N)])
+                              for a in A])
