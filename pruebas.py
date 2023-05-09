@@ -33,10 +33,11 @@ while iteraciones < max_iteraciones:
 
         V[i] = valor_max
 
-    difference = [abs(V[i] - V_anterior[i]) for i in range(len(V))]
+    difference = [abs(V[i] - V_anterior[i]) for i in range(len(V)) if prob.iloc[i].any() != 0]
 
     if max(difference) < tolerancia:
         convergencia = True
         break
     iteraciones += 1
 print("Valores de la función de valor V:", V)
+print(convergencia)
