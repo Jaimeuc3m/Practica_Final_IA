@@ -5,7 +5,7 @@ acciones = ['encender', 'apagar']
 estados = []
 for i in range(160, 255, 5):
     estados.append(i/10)
-meta = 22
+
 max_iteraciones = 5000
 iteraciones = 0
 tolerancia = 1e-5
@@ -14,8 +14,9 @@ convergencia = False
 df = pd.read_csv('TPC.csv')
 
 costes = df.iloc[:, 0]
+meta = df.iloc[:, 1]
+prob = df.iloc[:, 2:21]
 
-prob = df.iloc[:, 1:20]
 
 V = [0] * len(costes)
 
