@@ -29,4 +29,4 @@ with open('TPC.csv', 'r') as file:
                 V[i] = ecuacion_apagar
             else:
                 V[i] = ecuacion_encender
-        
+
