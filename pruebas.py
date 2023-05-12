@@ -14,10 +14,17 @@ num_estados = len(estados)
 
 df = pd.read_csv('TPC.csv')
 
-coste_encender = df.iloc[0, 1].values.tolist()
-coste_apagar = df.iloc[0, 2].values.tolist()
-prob_encender = df.iloc[1:, :].values.tolist()
-prob_apagar = df.iloc[21:, :].values.tolist()
+coste_encender = df.iloc[0, 0]
+coste_apagar = df.iloc[0, 1]
+prob_encender = df.iloc[1:20, :]
+prob_apagar = df.iloc[21:, :]
+
+print(coste_encender)
+print(coste_apagar)
+print(prob_encender)
+print(prob_apagar)
+
+
 """
 V = np.zeros(num_estados)
 pron = np.zeros((num_acciones, num_estados, num_estados))
