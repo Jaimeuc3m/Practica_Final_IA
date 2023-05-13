@@ -11,56 +11,50 @@ convergencia = False
 meta = 22
 
 df = pd.read_csv('TPC.csv')
-num_estados, num_columnas = df.shape
 coste_encender = df.iloc[0, 0]
 coste_apagar = df.iloc[0, 1]
 prob_encender = df.iloc[1:20, :]
-num_filas, num_columnas = prob_encender.shape
 prob_apagar = df.iloc[21:, :]
-
-print(num_filas, num_columnas)
+num_estados= prob_encender.shape[0]
 V = np.zeros(num_estados)
-recompensas = np.zeros(num_estados)
-"""
+
 while iteraciones < max_iteraciones:
     V_anterior = V.copy()
+    valor_max = -np.inf
     for i in range(num_estados):
-        valor_max = float('-inf')
-
-        for j in range(num_acciones):
-            if acciones[j] == 'encender':
-                valor = coste_encender + prob_encender[i, j] * V_anterior[j]
-            else:
-                valor = coste_apagar + np.dot(prob_apagar[i, :], V_anterior)
-            if valor > valor_max:
+        sumatorio = np.sum(np.dot(prob_encender, V_anterior))
+        valor = coste_encender + sumatorio
+        print(sumatorio)
+        if valor > valor_max:
                 valor_max = valor
         V[i] = valor_max
 
-    difference = [abs(V[i] - V_anterior[i]) for i in range(len(V)) if prob_encender.iloc[i].any() != 0]
+    difference = np.abs(V - V_anterior)
 
     if max(difference) < tolerancia:
         convergencia = True
         break
     iteraciones += 1
 print("Valores de la función de valor V:", V)
-print(convergencia)
-"""
+print(iteraciones)
+
 """
 while iteraciones < max_iteraciones:
     V_anterior = V.copy()
-    for i in range(len(costes)):
-        coste = costes.iloc[i]
-        valor_max = float('-inf')
+    valor_max = -np.inf
+    for i in range(num_estados_filas):
+        valor = coste_encender + np.sum(np.dot(prob_encender, V_anterior))
 
-        for j in range(len(prob.columns)):
-            valor = coste + prob.iloc[i, j] * V_anterior[j]
-
-            if valor > valor_max:
+        if valor > valor_max:
                 valor_max = valor
-
         V[i] = valor_max
 
-        # Calcular el costo actualizado y guardar el resultado
-        coste_actualizado = # Cálculo del nuevo costo
-        resultados.append([coste_actualizado, V[i]])
+        difference = [abs(V[i] - V_anterior[i]) for i in range(len(V))]
+
+        if max(difference) < tolerancia:
+            convergencia = True
+            break
+        iteraciones += 1
+print("Valores de la función de valor V:", V)
+print(iteraciones)
 """
