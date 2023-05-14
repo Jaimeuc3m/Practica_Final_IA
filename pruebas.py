@@ -34,7 +34,7 @@ V_antiguo = V.copy()
 while not convergencia and iteraciones < max_iteraciones:
     i = 0
     valores = []
-    while estados[i] and i < num_estados:
+    while i < num_estados and estados[i] <= 25:
         estado = estados[i]
         posible_valor = []
         sumatorio = 0
@@ -44,8 +44,8 @@ while not convergencia and iteraciones < max_iteraciones:
                     sumatorio += pos_dest * V_antiguo[i]
             posible_valor.append(coste_encender + sumatorio)
             V[i] = min(posible_valor)
-        else:
-            V[i] = [0.0]
+            print(V)
+            print(V_antiguo)
         i += 1
     j = 0
     for antiguo in V_antiguo:
@@ -53,7 +53,7 @@ while not convergencia and iteraciones < max_iteraciones:
         if abs(antiguo/nuevo) < tolerancia:
             convergencia = True
     iteraciones += 1
-    print(iteraciones)
+
 
 """
 politica_optima = []
@@ -66,32 +66,4 @@ for estado in range(num_estados):
     else:
         politica_optima.append('apagar')
 print(politica_optima)
-"""
-"""
-df = pd.read_csv('TPC.csv')
-coste_encender = df.iloc[0, 0]
-coste_apagar = df.iloc[0, 1]
-prob_encender = df.iloc[1:20, :]
-prob_apagar = df.iloc[21:, :]
-num_estados= prob_encender.shape[0]
-V = np.zeros(num_estados)
-
-while iteraciones < max_iteraciones:
-    V_anterior = V.copy()
-    valor_max = -np.inf
-    for i in range(num_estados_filas):
-        valor = coste_encender + np.sum(np.dot(prob_encender, V_anterior))
-
-        if valor > valor_max:
-                valor_max = valor
-        V[i] = valor_max
-
-        difference = [abs(V[i] - V_anterior[i]) for i in range(len(V))]
-
-        if max(difference) < tolerancia:
-            convergencia = True
-            break
-        iteraciones += 1
-print("Valores de la función de valor V:", V)
-print(iteraciones)
 """
