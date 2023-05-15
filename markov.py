@@ -27,7 +27,7 @@ class Markov:
                 sumatorio1 = 0
                 sumatorio2 = 0
                 if estado != self.meta:                         #Comprobamos que el estado actual no es la meta
-                    for pos_des in range(self.num_estados):          #Realizamos el sumatorio y lo añadimos al coste
+                    for pos_des in range(self.num_estados):          #Realizamos el sumatorio y lo sumamos al coste
                         if self.tabla1[i][pos_des] != 0:
                             sumatorio1 += self.tabla1[i][pos_des] * V_antiguo[pos_des]
 
@@ -35,6 +35,7 @@ class Markov:
                             sumatorio2 += self.tabla2[i][pos_des] * V_antiguo[pos_des]
                     posible_valor.append(self.coste1 + sumatorio1)
                     posible_valor.append(self.coste2 + sumatorio2)
+                    #De todos los valores posibles se escoge el minimo
                     V[i] = np.min(posible_valor)
                 else:
                     V[i] = 0.0
@@ -54,6 +55,7 @@ class Markov:
         for i in range(self.num_estados):
             valores_encendido = self.cos_sum(self.tabla1, self.coste1, V)
             valores_apagado = self.cos_sum(self.tabla2, self.coste2, V)
+            #Teniendo en cuenta ambos valores, se busca el más pequeño en ese estado
             if valores_encendido[i] < valores_apagado[i]:
                 politica_optima.append('Encender')
             else:
@@ -69,5 +71,6 @@ class Markov:
                 if tabla[i][pos_des] != 0:
                     sumatorio += tabla[i][pos_des] * V[pos_des]
             Valor.append(coste + sumatorio)
+        #Devolvemos el array con los valores
         return Valor
 
