@@ -18,8 +18,8 @@ num_estados = probabilidades_encendido.shape[0]
 num_acciones = 2  # Encendido (acción 0) o Apagado (acción 1)
 
 # Crear una matriz de valores óptimos inicializados en cero
-V_enc = np.zeros(num_estados)
-V_ap = np.zeros(num_estados)
+V= np.zeros(num_estados)
+#V_ap = np.zeros(num_estados)
 
 # Definir la función de utilidad de las acciones
 acciones = np.array([coste_enc, coste_ap])
@@ -31,29 +31,35 @@ max_iteraciones = 5000
 iteraciones = 0
 
 while not convergencia and iteraciones < max_iteraciones:
-    V_antiguo_enc = V_enc.copy()
+    V_antiguo = V.copy()
     i = 0
     while i < num_estados:
         estado = estados[i]
         posible_valor = []
-        sumatorio = 0
+        sumatorio1 = 0
+        sumatorio2 = 0
         if estado != meta:
             for pos_des in range(num_estados):
                 if probabilidades_encendido[i][pos_des] != 0:
-                    sumatorio += probabilidades_encendido[i][pos_des] * V_antiguo_enc[pos_des]
-                    posible_valor.append(coste_enc + sumatorio)
-            V_enc[i] = np.min(posible_valor)
+                    sumatorio1 += probabilidades_encendido[i][pos_des] * V_antiguo[pos_des]
+
+                if probabilidades_apagado[i][pos_des] != 0:
+                    sumatorio2 += probabilidades_apagado[i][pos_des] * V_antiguo[pos_des]
+            posible_valor.append(coste_enc + sumatorio1)
+            posible_valor.append(coste_ap + sumatorio2)
+            V[i] = np.min(posible_valor)
+            #print(V)
         else:
-            V_enc[i] = 0.0
+            V[i] = 0.0
         i += 1
-    if np.linalg.norm(V_enc - V_antiguo_enc) < tolerancia:
+    if np.linalg.norm(V - V_antiguo) < tolerancia:
         convergencia = True
     iteraciones += 1
 print("Iteraciones:", iteraciones)
 print("Convergencia:", convergencia)
-print("Valores óptimos:")
-print(V_enc)
-
+print("Valores:")
+print(V)
+"""
 convergencia = False
 iteraciones = 0
 while not convergencia and iteraciones < max_iteraciones:
@@ -79,6 +85,7 @@ print("Iteraciones:", iteraciones)
 print("Convergencia:", convergencia)
 print("Valores óptimos:")
 print(V_ap)
+"""
 i = 0
 politica_optima = []
 valores_enc = []
@@ -86,11 +93,12 @@ valores_ap = []
 while i < num_estados:
     sumatorio_encendido = 0
     sumatorio_apagado = 0
+    estado = estados[i]
     for pos_des in range(num_estados):
         if probabilidades_encendido[i][pos_des] != 0:
-            sumatorio_encendido += probabilidades_encendido[i][pos_des] * V_enc[pos_des]
+            sumatorio_encendido += probabilidades_encendido[i][pos_des] * V[pos_des]
         if probabilidades_apagado[i][pos_des] != 0:
-            sumatorio_apagado += probabilidades_apagado[i][pos_des] * V_ap[pos_des]
+            sumatorio_apagado += probabilidades_apagado[i][pos_des] * V[pos_des]
     valores_enc.append(coste_enc + sumatorio_encendido)
     valores_ap.append(coste_ap + sumatorio_apagado)
     i += 1

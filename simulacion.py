@@ -54,10 +54,10 @@ class SimuladorCalefaccion:
             self.temperatura_actual = max(min(self.temperatura_actual, 25), 16)  # Aplicar límites
             self.temperatura_actual = round(self.temperatura_actual, 1)  # Redondear a una decimal
 
-            tiempo += 0.5
             if self.temperatura_actual == self.temperatura_deseada:
                 print("Simulación finalizada. Temperatura alcanzada:", self.temperatura_actual)
                 break
+            tiempo += 0.5
         if self.temperatura_actual != self.temperatura_deseada:
             print("Tiempo máximo alcanzado. Temperatura actual:", self.temperatura_actual)
 

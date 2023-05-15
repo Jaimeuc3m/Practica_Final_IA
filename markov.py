@@ -35,13 +35,12 @@ class Markov:
             if np.linalg.norm(V - V_antiguo) < self.tolerancia:
                 convergencia = True
             iteraciones += 1
-
         return V
 
     def politica_optima(self, V0, V1, coste1, coste2, tabla1, tabla2):
         #Buscamos la politica óptima de ambos valores óptimos
         num_estados = len(self.estados)
-        politica_optima = [] * num_estados
+        politica_optima = []
         for i in range(num_estados):
             valores_encendido = self.cos_sum(tabla1, coste1, num_estados, V0)
             valores_apagado = self.cos_sum(tabla2, coste2, num_estados, V1)
