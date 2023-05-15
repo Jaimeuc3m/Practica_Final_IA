@@ -45,6 +45,7 @@ while not convergencia and iteraciones < max_iteraciones:
 
                 if probabilidades_apagado[i][pos_des] != 0:
                     sumatorio2 += probabilidades_apagado[i][pos_des] * V_antiguo[pos_des]
+
             posible_valor.append(coste_enc + sumatorio1)
             posible_valor.append(coste_ap + sumatorio2)
             V[i] = np.min(posible_valor)
