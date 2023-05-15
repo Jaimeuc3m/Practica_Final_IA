@@ -35,7 +35,7 @@ class Markov:
             if np.linalg.norm(V - V_antiguo) < self.tolerancia:
                 convergencia = True
             iteraciones += 1
-        #Retornamos los valores óptimos para porsteriormente hacer la politica óptima
+
         return V
 
     def politica_optima(self, V0, V1, V2):
@@ -47,12 +47,12 @@ class Markov:
             #Si el estado actual es la meta, va apagar la calefaccion
             valor_encendido = V0[i]
             valor_apagado = V1[i]
-            valor_mantenido = V2[i]
+            #valor_mantenido = V2[i]
             #vamos yendo 1 por 1 los valores óptimos, comparando sus valores
             if valor_encendido <= valor_apagado:
                 politica_optima.append('Encender')
-            elif valor_mantenido <= valor_apagado and politica_optima [i-1] == "encender" or politica_optima [i-1] == "mantener":
-                politica_optima.append("mantener encendido")
+            #elif valor_mantenido <= valor_apagado and politica_optima [i-1] == "encender" or politica_optima [i-1] == "mantener":
+            #    politica_optima.append("mantener encendido")
             else:
                 politica_optima.append('Apagar')
         #Devulve la lista de politica óptima
