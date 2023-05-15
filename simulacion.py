@@ -1,0 +1,54 @@
+import random
+import numpy as np
+
+class SimuladorCalefaccion:
+    def __init__(self, politica_optima, temperatura_deseada, tiempo_maximo):
+        self.politica_optima = politica_optima
+        self.temperatura_deseada = temperatura_deseada
+        self.temperatura_actual = random.choice(np.arange(16, 25.5, 0.5))
+        self.tiempo_maximo = tiempo_maximo
+
+    def ejecutar_simulacion(self):
+        print("Temperatura inicial:", self.temperatura_actual)
+        print("Temperatura deseada:", self.temperatura_deseada)
+        #self.temperatura_actual != self.temperatura_deseada
+        tiempo = 0
+        while tiempo <= self.tiempo_maximo:
+            accion = self.politica_optima[int((self.temperatura_actual - 16) * 2)]
+            print("Tiempo:", tiempo, "- Acción:", accion, "- Temperatura actual:", self.temperatura_actual)
+            if accion == 'Encender':
+                if self.temperatura_actual == 16:
+                    opciones_encender = [0, 0.5, 1]
+                    prob_encend = [0.3, 0.5, 0.2]
+                elif self.temperatura_actual == 24.5:
+                    opciones_encender = [-0.5, 0, 0.5]
+                    prob_encend = [0.1, 0.2, 0.7]
+                elif self.temperatura_actual == 25:
+                    opciones_encender = [-0.5, 0]
+                    prob_encend = [0.1, 0.9]
+                else:
+                    opciones_encender = [-0.5, 0, 0.5, 1]
+                    prob_encend = [0.1, 0.2, 0.5, 0.2]
+                cambio_temperatura = random.choices(opciones_encender, weights=prob_encend)[0]
+            else:
+                if self.temperatura_actual == 16:
+                    opciones_apagar = [0, 0.5]
+                    prob_apagar = [0.9, 0.1]
+                elif self.temperatura_actual == 25:
+                    opciones_apagar = [-0.5, 0]
+                    prob_apagar = [0.7, 0.3]
+                else:
+                    opciones_apagar = [-0.5, 0, 0.5]
+                    prob_apagar = [0.7, 0.2, 0.1]
+                cambio_temperatura = random.choices(opciones_apagar, weights=prob_apagar)[0]
+
+            self.temperatura_actual += cambio_temperatura
+            self.temperatura_actual = max(min(self.temperatura_actual, 25), 16)  # Aplicar límites
+            self.temperatura_actual = round(self.temperatura_actual, 1)  # Redondear a una decimal
+
+            tiempo += 0.5
+        if self.temperatura_actual == self.temperatura_deseada:
+            print("Simulación finalizada. Temperatura alcanzada:", self.temperatura_actual)
+        else:
+            print("Tiempo máximo alcanzado. Temperatura actual:", self.temperatura_actual)
+

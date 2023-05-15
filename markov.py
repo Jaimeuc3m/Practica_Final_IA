@@ -55,6 +55,7 @@ class Markov:
 
         return politica_optima
 
+"""
 datos = pd.read_csv('TPC.csv')
 
 # Extraer los valores de costos y probabilidades
@@ -79,3 +80,4 @@ politica_optima = solver_enc.politica_optima(V_enc, V_ap)
 print("Política óptima:")
 print(politica_optima)
 
+"""
