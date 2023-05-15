@@ -42,7 +42,10 @@ class Markov:
             if np.linalg.norm(V - V_antiguo) < self.tolerancia:
                 convergencia = True
             iteraciones += 1
-        print("Número de iteraciones: ", iteraciones)
+        if iteraciones == self.max_iteraciones:
+            print("Atención!! Se ha llegado al número de iteraciones máximas.")
+        else:
+            print("Número de iteraciones: ", iteraciones)
         return V
 
     def politica_optima(self, V):
