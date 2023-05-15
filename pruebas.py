@@ -79,20 +79,30 @@ print("Iteraciones:", iteraciones)
 print("Convergencia:", convergencia)
 print("Valores óptimos:")
 print(V_ap)
-
+i = 0
 politica_optima = []
-
+valores_enc = []
+valores_ap = []
+while i < num_estados:
+    sumatorio_encendido = 0
+    sumatorio_apagado = 0
+    for pos_des in range(num_estados):
+        if probabilidades_encendido[i][pos_des] != 0:
+            sumatorio_encendido += probabilidades_encendido[i][pos_des] * V_enc[pos_des]
+        if probabilidades_apagado[i][pos_des] != 0:
+            sumatorio_apagado += probabilidades_apagado[i][pos_des] * V_ap[pos_des]
+    valores_enc.append(coste_enc + sumatorio_encendido)
+    valores_ap.append(coste_ap + sumatorio_apagado)
+    i += 1
+print("Valores_enc ", valores_enc)
+print("Valores_ap ", valores_ap)
 for i in range(num_estados):
-    estado = estados[i]
-    if estado != meta:
-        valor_encendido = V_enc[i]
-        valor_apagado = V_ap[i]
-        if valor_encendido <= valor_apagado:
-            politica_optima.append('Encender')
-        else:
-            politica_optima.append('Apagar')
+    if valores_enc[i] < valores_ap[i]:
+        politica_optima.append('Encender')
     else:
         politica_optima.append('Apagar')
-
 print("Política óptima:")
 print(politica_optima)
+
+
+
