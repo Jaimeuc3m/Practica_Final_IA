@@ -38,7 +38,7 @@ class Markov:
         #Retornamos los valores óptimos para porsteriormente hacer la politica óptima
         return V
 
-    def politica_optima(self, V0, V1):
+    def politica_optima(self, V0, V1, V2):
         #Buscamos la politica óptima de ambos valores óptimos
         politica_optima = []
 
@@ -48,9 +48,12 @@ class Markov:
             if estado != self.meta:
                 valor_encendido = V0[i]
                 valor_apagado = V1[i]
+                valor_mantenido = V2[i]
                 #vamos yendo 1 por 1 los valores óptimos, comparando sus valores
                 if valor_encendido <= valor_apagado:
                     politica_optima.append('Encender')
+                elif valor_mantenido <= valor_apagado and politica_optima [-1] == "encender" or politica_optima [-1] == "mantener":
+                    politica_optima.append("mantener encendido")
                 else:
                     politica_optima.append('Apagar')
             else:
