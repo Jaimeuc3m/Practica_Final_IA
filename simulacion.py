@@ -13,9 +13,16 @@ class SimuladorCalefaccion:
         print("Temperatura deseada:", self.temperatura_deseada)
 
         tiempo = 0
+        hora_inicial = 9
         while tiempo <= self.tiempo_maximo:
             accion = self.politica_optima[int((self.temperatura_actual - 16) * 2)]
-            print("Tiempo:", tiempo, "- Acción:", accion, "- Temperatura actual:", self.temperatura_actual)
+            horas_completas = int(tiempo) // 1
+            minutos = int((tiempo % 1) * 60)
+            tiempo_total = (hora_inicial + horas_completas) % 24
+            if tiempo_total == 24:
+                tiempo_total = 0
+            tiempo_actual = "{:02d}:{:02d}".format(tiempo_total, minutos)
+            print("Tiempo:", tiempo_actual, "- Acción:", accion, "- Temperatura actual:", self.temperatura_actual)
             if accion == 'Encender' or accion == 'Mantener encendido':
                 if self.temperatura_actual == 16:
                     opciones_encender = [0, 0.5, 1]

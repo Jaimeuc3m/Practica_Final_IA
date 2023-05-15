@@ -16,7 +16,7 @@ def main():
 
     # Definir la temperatura deseada y el tiempo maximo de la simulacion
     temperatura_deseada = 22
-    tiempo_maximo = 20
+    tiempo_maximo = 40
 
     # Crear el objeto Markov y calcular la política óptima
     solver_enc = Markov(probabilidades_encendido, coste_enc, temperatura_deseada, estados)
