@@ -23,7 +23,8 @@ class SimuladorCalefaccion:
                 tiempo_total = 0
             tiempo_actual = "{:02d}:{:02d}".format(tiempo_total, minutos)
             print("Tiempo:", tiempo_actual, "- Acción:", accion, "- Temperatura actual:", self.temperatura_actual)
-            if accion == 'Encender' or accion == 'Mantener encendido':
+
+            if accion == 'Encender':
                 if self.temperatura_actual == 16:
                     opciones_encender = [0, 0.5, 1]
                     prob_encend = [0.3, 0.5, 0.2]

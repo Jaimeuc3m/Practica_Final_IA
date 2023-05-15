@@ -38,23 +38,31 @@ class Markov:
 
         return V
 
-    def politica_optima(self, V0, V1, V2):
+    def politica_optima(self, V0, V1, coste1, coste2, tabla1, tabla2):
         #Buscamos la politica óptima de ambos valores óptimos
         politica_optima = []
-
-        for i in range(len(self.estados)):
+        num_estados = len(self.estados)
+        for i in range(num_estados):
             estado = self.estados[i]
-            #Si el estado actual es la meta, va apagar la calefaccion
-            valor_encendido = V0[i]
-            valor_apagado = V1[i]
-            #valor_mantenido = V2[i]
-            #vamos yendo 1 por 1 los valores óptimos, comparando sus valores
-            if valor_encendido <= valor_apagado:
-                politica_optima.append('Encender')
-            #elif valor_mantenido <= valor_apagado and politica_optima [i-1] == "encender" or politica_optima [i-1] == "mantener":
-            #    politica_optima.append("mantener encendido")
+            valores_encendido = self.cos_sum(tabla1, coste1, num_estados, V0)
+            valores_apagado = self.cos_sum(tabla2, coste2, num_estados, V1)
+            cual = np.argmin([valores_encendido[i], valores_apagado[i]])
+            if cual == 0:
+                politica_optima.append("Encender")
             else:
                 politica_optima.append('Apagar')
         #Devulve la lista de politica óptima
         return politica_optima
+
+    def cos_sum(self, tabla, coste, num_estados, V):
+        Valor = [0.0] * num_estados
+        for i in range(num_estados):
+            posible_valor = []
+            sumatorio = 0
+            for pos_des in range(num_estados):  # Realizamos el sumatorio y lo añadimos al coste
+                if tabla[i][pos_des] != 0:
+                    sumatorio += tabla[i][pos_des] * V[pos_des]
+                    posible_valor.append(coste + sumatorio)
+            Valor[i] = np.min(posible_valor)
+        return Valor
 
