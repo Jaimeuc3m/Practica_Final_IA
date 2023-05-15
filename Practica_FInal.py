@@ -30,3 +30,19 @@ with open('TPC.csv', 'r') as file:
             else:
                 V[i] = ecuacion_encender
 
+with open('TPC.csv', 'r') as file:
+    lector_csv = csv.reader(file)
+    datos = list(lector_csv)
+
+    for i in range(1, 20):
+        fila = [float(dato) for dato in datos[i]]
+        prob_encender.append(fila)
+    for i in range(20, len(datos)):
+        fila = [float(dato) for dato in datos[i]]
+        prob_apagar.append(fila)
+
+num_estados = len(estados)
+V = [0.0] * num_estados
+coste_encender = float(datos[0][0])
+coste_apagar = float(datos[0][1])
+V_antiguo = V.copy()

@@ -1,69 +1,57 @@
-import csv
 import pandas as pd
 import numpy as np
 
-acciones = ['encender', 'apagar']
-num_acciones = len(acciones)
+# Cargar los datos del archivo CSV
+datos = pd.read_csv('TPC.csv')
+
+# Extraer los valores de costos y probabilidades
+coste_enc = datos.iloc[0, 0]
+coste_ap = datos.iloc[0, 1]
+probabilidades_encendido = datos.iloc[1:20, :].values
+probabilidades_apagado = datos.iloc[20:, :].values
+estados = np.arange(16, 25.5, 0.5)
+# Definir la temperatura deseada por el usuario
+temperatura_deseada = 22
+
+# Obtener el número de estados y acciones
+num_estados = probabilidades_encendido.shape[0]
+num_acciones = 2  # Encendido (acción 0) o Apagado (acción 1)
+
+# Crear una matriz de valores óptimos inicializados en cero
+V = np.zeros(num_estados)
+
+# Definir la función de utilidad de las acciones
+acciones = np.array([coste_enc, coste_ap])
+
+# Iterar hasta alcanzar la convergencia
+convergencia = False
+tolerancia = 0.0001
 max_iteraciones = 5000
 iteraciones = 0
-tolerancia = 1e-5
-convergencia = False
-meta = 22
-estados = [16 + i * 0.5 for i in range(19)]
-
-prob_encender = []
-prob_apagar = []
-
-with open('TPC.csv', 'r') as file:
-    lector_csv = csv.reader(file)
-    datos = list(lector_csv)
-
-    for i in range(1, 20):
-        fila = [float(dato) for dato in datos[i]]
-        prob_encender.append(fila)
-    for i in range(20, len(datos)):
-        fila = [float(dato) for dato in datos[i]]
-        prob_apagar.append(fila)
-
-num_estados = len(estados)
-V = [0.0] * num_estados
-coste_encender = float(datos[0][0])
-coste_apagar = float(datos[0][1])
-V_antiguo = V.copy()
 
 while not convergencia and iteraciones < max_iteraciones:
+    V_antiguo = V.copy()
+    print(V_antiguo)
     i = 0
-    valores = []
-    while i < num_estados and estados[i] <= 25:
+    while i < num_estados:
         estado = estados[i]
+        print(estado)
         posible_valor = []
         sumatorio = 0
-        if estado != meta:
-            for pos_dest in prob_encender[i]:
-                if pos_dest != 0:
-                    sumatorio += pos_dest * V_antiguo[i]
-            posible_valor.append(coste_encender + sumatorio)
-            V[i] = min(posible_valor)
-            print(V)
-            print(V_antiguo)
+        if estado != temperatura_deseada:
+            for pos_des in range(num_estados):
+                if probabilidades_encendido[pos_des][i] != 0:
+                    sumatorio += probabilidades_encendido[pos_des][i] * V_antiguo[pos_des]
+                posible_valor.append(coste_enc + sumatorio)
+            V[i] = np.min(posible_valor)
+        else:
+            V[i] = 0.0
         i += 1
-    j = 0
-    for antiguo in V_antiguo:
-        nuevo = V[j]
-        if abs(antiguo/nuevo) < tolerancia:
-            convergencia = True
+    if np.linalg.norm(V - V_antiguo) < tolerancia:
+        convergencia = True
     iteraciones += 1
+print("Iteraciones:", iteraciones)
+print("Convergencia:", convergencia)
+print("Valores óptimos:")
+print(V)
 
-
-"""
-politica_optima = []
-for estado in range(num_estados):
-    valor_encender = coste_encender + min([prob_encender[estado][i] * V_antiguo[i] for i in range(num_estados)])
-    valor_apagar = coste_apagar + min([prob_apagar[estado][i] * V_antiguo[i] for i in range(num_estados)])
-
-    if valor_encender > valor_apagar:
-        politica_optima.append('Encender')
-    else:
-        politica_optima.append('apagar')
-print(politica_optima)
-"""
