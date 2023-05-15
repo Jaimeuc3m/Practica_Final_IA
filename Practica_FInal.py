@@ -13,9 +13,9 @@ def main():
     probabilidades_apagado = datos.iloc[20:, :].values
     estados = np.arange(16, 25.5, 0.5)
 
-    # Definir la temperatura deseada por el usuario
+    # Definir la temperatura deseada y el tiempo maximo de la simulacion
     temperatura_deseada = 22
-    tiempo_maximo = 16
+    tiempo_maximo = 20
 
     # Crear el objeto Markov y calcular la política óptima
     solver_enc = Markov(probabilidades_encendido, coste_enc, temperatura_deseada, estados)

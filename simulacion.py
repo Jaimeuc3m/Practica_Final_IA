@@ -11,7 +11,7 @@ class SimuladorCalefaccion:
     def ejecutar_simulacion(self):
         print("Temperatura inicial:", self.temperatura_actual)
         print("Temperatura deseada:", self.temperatura_deseada)
-        #self.temperatura_actual != self.temperatura_deseada
+
         tiempo = 0
         while tiempo <= self.tiempo_maximo:
             accion = self.politica_optima[int((self.temperatura_actual - 16) * 2)]
