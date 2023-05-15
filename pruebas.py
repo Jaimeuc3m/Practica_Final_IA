@@ -25,28 +25,30 @@ acciones = np.array([coste_enc, coste_ap])
 
 # Iterar hasta alcanzar la convergencia
 convergencia = False
-tolerancia = 0.0001
+tolerancia = 0.00001
 max_iteraciones = 5000
 iteraciones = 0
 
 while not convergencia and iteraciones < max_iteraciones:
     V_antiguo = V.copy()
-    print(V_antiguo)
+    print("Antiguo: ", V_antiguo)
     i = 0
     while i < num_estados:
         estado = estados[i]
-        print(estado)
         posible_valor = []
         sumatorio = 0
         if estado != temperatura_deseada:
             for pos_des in range(num_estados):
-                if probabilidades_encendido[pos_des][i] != 0:
-                    sumatorio += probabilidades_encendido[pos_des][i] * V_antiguo[pos_des]
+                if probabilidades_encendido[i][pos_des] != 0:
+                    sumatorio += probabilidades_encendido[i][pos_des] * V_antiguo[pos_des]
                 posible_valor.append(coste_enc + sumatorio)
+                print(pos_des)
             V[i] = np.min(posible_valor)
         else:
             V[i] = 0.0
         i += 1
+        print(posible_valor)
+        print("Valor ", V)
     if np.linalg.norm(V - V_antiguo) < tolerancia:
         convergencia = True
     iteraciones += 1
